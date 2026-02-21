@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: minesweepBackend
+  datasource:
+    url: jdbc:h2:file:./data/minesweep
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  port: 8080
+
+app:
+  default-user:
+    enabled: true
+    username: magichear
+    password: "111"
+
+ai:
+  websocket:
+    url: ws://localhost:8765
+  model:
+    beginner:
+      name: imitation_cnn_best
+    intermedium:
+      name: imitation_cnn_best_1
+    expert:
+      name: ""
+
+solver:
+  max-enum-cells: 80
+  max-valid-assignments: 200000
+  eval:
+    games: 200
+    seed: 20260221
+
+jwt:
+  secret: minesweep-jwt-secret-key-2026-change-in-production
+  expiration-ms: 86400000
