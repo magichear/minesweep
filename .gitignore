@@ -1,3 +1,6 @@
 dist
 .vscode
+minesweepFrontend/bundle
+minesweepFrontend/dist-electron
+minesweepFrontend/.cache
 

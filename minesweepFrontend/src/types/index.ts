@@ -80,3 +80,16 @@ export interface AiTestResult {
   username: string;
   createdAt: string;
 }
+
+// External Assist
+export interface AnalyzeResponse {
+  rows: number;
+  cols: number;
+  board: number[][];
+  probabilities: number[][];
+  safestRow: number;
+  safestCol: number;
+  action: string;
+  warnings: string[];
+  calibrationOk: boolean;
+}

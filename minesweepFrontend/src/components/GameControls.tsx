@@ -17,6 +17,8 @@ interface GameControlsProps {
   onToggleHeatmap: (enabled: boolean) => void;
   onShowStats: () => void;
   onShowAiTest: () => void;
+  onShowExternalAssist: () => void;
+  onShowHelp: () => void;
 }
 
 const DIFF_LABELS: Record<Difficulty, string> = {
@@ -33,7 +35,7 @@ const RULE_LABELS: Record<GameRule, string> = {
 const GameControls: React.FC<GameControlsProps> = ({
   difficulty, gameRule, minesRemaining, gameOver, won, started,
   elapsedSeconds, aiEnabled, heatmapEnabled,
-  onNewGame, onChangeGameRule, onToggleAi, onToggleHeatmap, onShowStats, onShowAiTest,
+  onNewGame, onChangeGameRule, onToggleAi, onToggleHeatmap, onShowStats, onShowAiTest, onShowExternalAssist, onShowHelp,
 }) => {
   const [timer, setTimer] = useState(0);
   const [startTs, setStartTs] = useState<number | null>(null);
@@ -115,6 +117,8 @@ const GameControls: React.FC<GameControlsProps> = ({
         </label>
         <button className="stats-btn" onClick={onShowStats}>📊 统计</button>
         <button className="stats-btn" onClick={onShowAiTest}>🧪 辅助强度测试</button>
+        <button className="stats-btn" onClick={onShowExternalAssist}>🔍 其它辅助</button>
+        <button className="stats-btn" onClick={onShowHelp}>❓ Help</button>
       </div>
     </div>
   );

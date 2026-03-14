@@ -2,7 +2,8 @@
 
 一个全栈扫雷游戏，集成智能求解器辅助预测和自动化测试功能。
 
-![alt text](image.png)
+![alt text](readmeAssets/image.png)
+![alt text](readmeAssets/c254e596a1e8eb315e291cf00ad3595a.gif)
 
 ## 求解器胜率情况（辅助强度）
 
@@ -18,37 +19,50 @@ SolverTest = first click: single cell safe (mine relocated)
 Backend    = first click: 3×3 safe zone, always blank (0)
 Δ (pp)     = Backend win rate - SolverTest win rate (percentage points)
 
+在微软商店中下载的`Minesweep`游戏中以`245ms`间隔操作鼠标（再快可能导致点击失灵，因此有硬性延迟）可极速完成游戏，超越绝大部分玩家。下图中胜率可忽略，大部分为作者本人手玩结果
+![alt text](readmeAssets/dc067355d325bffff74b08f82e87eac6.png)
+
 ## 技术栈
 
 | 层 | 技术 | 版本 |
 |---|------|------|
-| **后端** | Spring Boot / Java | 4.0.2 / 25 |
-| **前端** | React / TypeScript / Vite | 19 / 5.8 / 6.3 |
-| **数据库** | H2 (file) | — |
-| **序列化** | Jackson 3.x (`tools.jackson`) | — |
+| **后端** | Spring Boot / Java / jlink | 4.0.2 / 25 |
+| **前端** | React / TypeScript / Vite / Electron | 19 / 5.8 / 6.3 / 35 |
+| **打包** | electron-builder / Powershell | Windows Portable EXE |
+| **数据库** | H2 (本地文件) | — |
+| **其他** | Jackson 3.x, Java Robot (自动化) | — |
 
 ## 项目结构
 
-```
+```text
 minesweep/
-├── minesweepBackend/   # Spring Boot 后端 (包含 ExpertSolver 智能求解器)
-├── minesweepFrontend/  # React 前端
-├── build.ps1           # 一键构建脚本
-├── run.ps1             # 一键启动 (PowerShell)
-└── run.bat             # 一键启动 (CMD)
+├── minesweepBackend/   # Spring Boot 后端 (含原生游戏、智能求解器 + 外部屏幕识别与控制)
+├── minesweepFrontend/  # React / Electron 桌面端前端 (含透明悬浮窗)
+├── build.ps1           # 一键自动构建及打包脚本 (生成免安装 EXE)
+├── run.ps1             # 快速启动代理脚本 (PowerShell)     可忽略
+└── run.bat             # 快速启动代理脚本 (CMD)            可忽略
 ```
 
 ## 功能特性
 
-### 🕹️ 核心游戏
+### �️ 外部游戏辅助悬浮窗 (External Assist)
+- 屏幕捕捉与图像识别：自动扫描并在屏幕上识别扫雷游戏区域与状态（支持 16×16 等规则网格）
+- Electron 透明悬浮窗：直接在外部应用上方覆盖渲染概率热力图、安全格高亮标记
+- 自动化控制：内置 Java Robot 鼠标操控，可选择让 AI 自动“点击最安全格”或在必要时“智能猜雷”
+
+![alt text](readmeAssets/image-1.png)
+
+
+
+### 🕹️ 原生内建游戏
 - 三种难度：简单 (9×9, 10雷)、中等 (16×16, 40雷)、困难 (16×30, 99雷)
 - 首次点击必定安全 (空白格 + 自动扩散)
 - 右键标旗、计时器、剩余雷数显示
 
-### 🤖 智能辅助 (ExpertSolver)
-- 基于确定性推理与概率计算的 Java 原生求解器 (支持所有难度)
-- **切换模式**：开启后自动在每次揭开后显示概率热力图 + 最安全格高亮
-- 关闭时完全隐藏辅助信息
+### 🤖 智能辅助求解器 (ExpertSolver)
+- 基于确定性推理与概率计算的 Java 原生求解器算法 (支持所有难度)
+- **手动/自动 预测**：可在任意状态下刷新显示所有未知格的“安全概率热力图”
+- 自动测试评估体系：内建算法效果可验证的性能基准
 
 ### 🧪 求解器自动化测试
 - 命名测试批次，自动运行 100 局游戏
@@ -70,15 +84,17 @@ minesweep/
 
 ## 快速开始
 
-### 前置条件
+### 前置条件（仅开发者构建时需要）
 
-- **Java 25+**
-- **Node.js 18+** & npm
+- 系统：Windows 10/11
+- 构建依赖：**JDK 25+**（用于 Maven / jdeps / 裁剪 jlink）
+- 构建依赖：**Node.js 18+** & npm
+- 注意：**最终生成的打包产物无需任何本地 Java 或 Node.js 环境即可直接免安装运行**
 
-### 构建
+### 构建命令
 
 ```powershell
-# 一键构建 (前端 + 后端打包)
+# 一键自动构建（执行前端编译 -> 资源同步 -> 后端打包 -> JRE裁剪 -> Electron打包为单文件EXE）
 .\build.ps1
 ```
 
@@ -97,17 +113,16 @@ cd minesweepBackend
 
 ### 运行
 
-```powershell
-# PowerShell (推荐)
-.\run.ps1
+构建完成后，最终产物位于目录中：`dist/MinesweepAssist.exe`
 
-# 或 CMD
-.\run.bat
-```
+这是一个完整的**绿色单文件携带包 (Portable EXE)**。
+它在内部集成了：
+- 编译好的 Vite 前端页面 (React)
+- 包含图像识别与求解算法的 Spring Boot (`.jar`) 后端
+- 通过 `jlink` 精简过的迷你 Java 运行时
+- Electron 桌面容器
 
-启动后将自动：
-1. 启动 Spring Boot 后端 (端口 8080)
-2. 检测后端就绪后 **自动打开浏览器**
+**双击该 EXE 文件**（或使用工程根目录的 `run.bat` / `run.ps1`）即可直接启动应用，自动在后台拉起无窗口形态的 Java 服务并开启前端主界面视图。
 
 ### 开发模式
 
@@ -158,6 +173,13 @@ cd minesweepBackend
 ```
 
 可选参数 `-Psolver-eval` ，加入后则包含隐藏的求解器性能测试
+
+## 后续计划
+
+- 前端Electron过于庞大，后续考虑进一步裁剪或改用其它更轻量化的客户端
+- 优化“其它辅助”中，“猜测停手”的判断逻辑，尽量减少“跳远”操作
+- 求解器在最终决策层引入MCS，提高决策质量
+
 
 ## 许可
 

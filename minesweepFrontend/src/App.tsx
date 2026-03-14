@@ -4,6 +4,8 @@ import GameControls from './components/GameControls';
 import StatsPanel from './components/StatsPanel';
 import LoginPanel from './components/LoginPanel';
 import AiTestPanel from './components/AiTestPanel';
+import ExternalAssistPanel from './components/ExternalAssistPanel';
+import HelpPanel from './components/HelpPanel';
 import type { GameState, PredictionResult, Difficulty, GameRule } from './types';
 import * as api from './api/gameApi';
 import './App.css';
@@ -25,6 +27,8 @@ function App() {
   const [heatmapEnabled, setHeatmapEnabled] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showAiTest, setShowAiTest] = useState(false);
+  const [showExternalAssist, setShowExternalAssist] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Set token on mount / auth change
@@ -182,6 +186,8 @@ function App() {
           onToggleHeatmap={handleToggleHeatmap}
           onShowStats={() => setShowStats(true)}
           onShowAiTest={() => setShowAiTest(true)}
+          onShowExternalAssist={() => setShowExternalAssist(true)}
+          onShowHelp={() => setShowHelp(true)}
         />
 
         {error && <div className="error-bar">{error}</div>}
@@ -229,6 +235,8 @@ function App() {
 
       <StatsPanel visible={showStats} onClose={() => setShowStats(false)} />
       <AiTestPanel visible={showAiTest} onClose={() => setShowAiTest(false)} />
+      <ExternalAssistPanel visible={showExternalAssist} onClose={() => setShowExternalAssist(false)} />
+      <HelpPanel visible={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   );
 }

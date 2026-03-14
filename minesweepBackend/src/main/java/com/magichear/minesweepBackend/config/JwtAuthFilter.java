@@ -63,6 +63,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private boolean isPublicPath(String path) {
         return path.startsWith("/api/auth/")
+                || path.startsWith("/api/external/")
                 || !path.startsWith("/api/");
     }
 

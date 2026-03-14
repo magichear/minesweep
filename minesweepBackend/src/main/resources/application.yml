@@ -1,6 +1,8 @@
 spring:
   application:
     name: minesweepBackend
+  main:
+    headless: false
   datasource:
     url: jdbc:h2:file:./data/minesweep
     driver-class-name: org.h2.Driver

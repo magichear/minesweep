@@ -1,6 +1,7 @@
 import type { GameState, PredictionResult, Stats, Difficulty, GameRule, AuthResponse, AiTestStatus, AiTestResult } from '../types';
 
-const BASE_URL = '/api';
+const isElectron = typeof window !== 'undefined' && !!(window as Window).electronAPI;
+const BASE_URL = isElectron ? 'http://localhost:8080/api' : '/api';
 
 let authToken: string | null = null;
 
