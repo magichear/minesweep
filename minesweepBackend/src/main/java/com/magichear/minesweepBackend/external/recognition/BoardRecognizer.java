@@ -62,7 +62,6 @@ public class BoardRecognizer {
     private static final int UNREVEALED_BRIGHT_GREY = 82;
     private static final int UNREVEALED_MID_GREY = 61;
     private static final int REVEALED_BG_GREY = 48;
-    private static final int SEPARATOR_GREY = 51;
     private static final int SEPARATOR_GREY_MIN = 49;
     private static final int SEPARATOR_GREY_MAX = 55;
 
@@ -152,7 +151,6 @@ public class BoardRecognizer {
         // Count how often each position is part of a separator
         int[] separatorVotes = new int[scanLength];
         for (int scanPos : scanPositions) {
-            boolean inSep = false;
             for (int pos = 0; pos < scanLength; pos++) {
                 int rgb = horizontal
                         ? image.getRGB(pos, scanPos)
@@ -269,7 +267,6 @@ public class BoardRecognizer {
         int coloredPixelCount = 0;
         int mineRedCount = 0;
         int flagRedCount = 0;
-        int brightYellowCount = 0;    // game-over text
 
         int sampleStep = Math.max(1, Math.min(w, h) / 20);
         if (sampleStep < 1) sampleStep = 1;
@@ -323,10 +320,6 @@ public class BoardRecognizer {
 
                 if (r > FLAG_RED_MIN && g < FLAG_GREEN_MAX && b < FLAG_GREEN_MAX) {
                     flagRedCount++;
-                }
-
-                if (r > 200 && g > 140 && b < 80) {
-                    brightYellowCount++;
                 }
             }
         }

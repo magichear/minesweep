@@ -1,10 +1,7 @@
 package com.magichear.minesweepBackend.external.controller;
 
-import com.magichear.minesweepBackend.external.dto.AnalyzeRequest;
 import com.magichear.minesweepBackend.external.dto.AnalyzeResponse;
 import com.magichear.minesweepBackend.external.dto.AutoClickRequest;
-import com.magichear.minesweepBackend.external.dto.CaptureRequest;
-import com.magichear.minesweepBackend.external.recognition.BoardRecognizer;
 import com.magichear.minesweepBackend.external.service.ExternalAssistService;
 import com.magichear.minesweepBackend.external.service.ScreenCaptureService;
 import lombok.extern.slf4j.Slf4j;
