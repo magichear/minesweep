@@ -1,5 +1,7 @@
 # 🎮 Minesweeper — 智能扫雷
 
+![alt text](readmeAssets/4345d3b05ecf041b1e81327f17d4405c.png)
+
 一个全栈扫雷游戏，集成智能求解器辅助预测和自动化测试功能，内置原生扫雷游戏并可借助识别框（可拉伸）辅助游玩其它来源扫雷游戏，应用具有web与GUI两种使用方式（游玩其它来源扫雷游戏时推荐使用GUI）。
 
 ![alt text](readmeAssets/image.png)
